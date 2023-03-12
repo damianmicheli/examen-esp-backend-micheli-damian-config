@@ -9,13 +9,14 @@ spring:
     username: movie-user
     password: movie-password
   jpa:
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: update
     generate-ddl: true
     show-sql: true
-  # sql:
-  #   init:
-  #     mode: always
-  #     data-locations: classpath:movie-service.sql
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:movie-service.sql
+      continue-on-error: true
 
 info:
   application:
