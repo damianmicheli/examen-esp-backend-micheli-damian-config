@@ -21,6 +21,13 @@ spring:
 info:
   application:
     name: movie-service
+    description: Movie Service for Movies Application
+    version: 1.0.0
+
+management:
+  info:
+    env:
+      enabled: true
 
 eureka:
   instance:
