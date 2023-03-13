@@ -8,7 +8,7 @@ spring:
 
 info:
   application:
-    name: catalog-service
+    name: ${spring.application.name}
     description: Catalog Service for Movies Application
     version: 1.0.0
 

@@ -20,7 +20,7 @@ spring:
 
 info:
   application:
-    name: movie-service
+    name: ${spring.application.name}
     description: Movie Service for Movies Application
     version: 1.0.0
 
