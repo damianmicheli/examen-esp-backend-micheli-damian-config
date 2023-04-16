@@ -4,6 +4,21 @@ server:
 spring:
   application:
     name: catalog-service
+  mongodb:
+    embedded:
+      version: 4.0.2
+  data:
+    mongodb:
+      database: movie-db
+      port: 27019
+  zipkin:
+    base-url: http://localhost:9411/
+    enabled: true
+  rabbitmq:
+    username: guest
+    password: guest
+    host: localhost
+    port: 5672
 
 
 info:
@@ -12,14 +27,21 @@ info:
     description: Catalog Service for Movies Application
     version: 1.0.0
 
+#Configuracion de  actuator
 management:
   endpoints:
     web:
       exposure:
-        include: info, health
+        include: circuitbreakers, circuitbreakerevents, health, info
   info:
     env:
       enabled: true
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
 
 eureka:
   instance:
@@ -30,3 +52,27 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+
+#Configuracion del circuit breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      catalog:
+        allowHealthIndicatorToFail: false
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 15s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+#Configuracion del mecanismo de reintentos.
+  retry:
+    instances:
+      catalog:
+        maxAttempts: 3
+        waitDuration: 1s
+        retryExceptions: 
+          - feign.FeignException$InternalServerError
+          - feign.FeignException$ServiceUnavailable
